@@ -34,7 +34,7 @@ class Login {
     @BeforeProcess
     public static void beforeProcess() {
         HTTPPluginControl.getConnectionDefaults().timeout = 6000
-        test = new GTest(1, "login test")
+        test = new GTest(1, "google test")
         request = new HTTPRequest()
         test.record(request);
     }
@@ -49,10 +49,6 @@ class Login {
         cookies.each {
             CookieModule.removeCookie(it, threadContext)
         }
-         
-        // do login & save to the login info in cookies 
-        //HTTPResponse res = request.POST("http://www.google.com");
-        //cookies = CookieModule.listAllCookies(threadContext)
     }
  
     @Before
@@ -64,11 +60,12 @@ class Login {
  
     @Test
     public void test(){
-        HTTPResponse result = request.GET("http://www.google.com")
+        HTTPResponse result = request.POST("https://hellobotapitest.xj8saekqh7.ap-northeast-2.elasticbeanstalk.com/v3/users/anonymous/create")
  
         if (result.statusCode == 301 || result.statusCode == 302) {
             grinder.logger.warn("Warning. The response may not be correct. The response code was {}.", result.statusCode);
         } else {
+            grinder.logger.info(result.getText());
             assertThat(result.statusCode, is(200));
         }
     }
